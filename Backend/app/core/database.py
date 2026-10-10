@@ -21,6 +21,8 @@ def normalize_db_url(url: str) -> str:
         return url.replace("postgresql://", "postgresql+asyncpg://", 1)
     if url.startswith("postgres://"):
         return url.replace("postgres://", "postgresql+asyncpg://", 1)
+    if (os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME")) and "sqlite" in url and "./" in url:
+        return url.replace("./", "/tmp/", 1)
     return url
 
 
